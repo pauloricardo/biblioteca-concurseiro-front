@@ -1,0 +1,186 @@
+<section class="header-questoes">
+    <form class="form" role="form">
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <select name="" id=""
+                            ng-model="questoesPublicController.filter.banca"
+                            ng-options="item.banca.id as item.banca.nome for item in questoesPublicController.bancas"
+                            ng-change="questoesPublicController.populateFilterInstituicao(questoesPublicController.filter.banca)"
+                            class="form-control">
+                        <option value="">Banca</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id=""
+                            class="form-control"
+                            ng-model="questoesPublicController.filter.instituicao"
+                            ng-options="item.id as item.nome for item in questoesPublicController.instituicoes"
+                            ng-change="questoesPublicController.populateFilterCargo(questoesPublicController.filter.instituicao)">
+                        <option value="">Instituição</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id=""
+                            class="form-control"
+                            ng-model="questoesPublicController.filter.cargo"
+                            ng-change="questoesPublicController.populateFilterConcurso(questoesPublicController.filter.cargo);
+                            questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo)"
+                            ng-options="item.cargos.id as item.cargos.nome for item in questoesPublicController.cargos">
+                        <option value="">Cargo</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id="" class="form-control"
+                            ng-model="questoesPublicController.filter.anoConcurso"
+                            ng-change="questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo, questoesPublicController.filter.anoConcurso)"
+                            ng-options="item.concurso.id as item.concurso.ano for item in questoesPublicController.concursos">
+                        <option value="">Ano</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <select name="" id=""
+                            ng-model="questoesPublicController.filter.nivelQuestao"
+                            class="form-control"
+                            ng-change="questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo, questoesPublicController.filter.anoConcurso,questoesPublicController.filter.nivelQuestao)"
+                            ng-options="item.id as item.nome for item in questoesPublicController.nivelQuestao">
+                        <option value="">Nível</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id=""
+                            ng-model="questoesPublicController.filter.disciplina"
+                            class="form-control"
+                            ng-options="item.disciplina.id as item.disciplina.nome for item in questoesPublicController.disciplinas">
+                        <option value="">Disciplina</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id="" class="form-control">
+                        <option value="">Assunto</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="" id="" class="form-control"
+                            ng-model="questoesPublicController.filter.modalidadeQuestao"
+                            class="form-control"
+                            ng-options="item.id as item.nome for item in questoesPublicController.modalidadeQuestao">
+                        <option value="">Modalidade</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    <br>
+                    <button class="btn btn-default" type="button"
+                            ng-click="questoesPublicController.cleanFilter()">Limpar
+                    </button>
+                    <button class="btn btn-primary" type="button"
+                            ng-click="questoesPublicController.filterQuestoes()">Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<div class="row">
+    <div class="col-md-12">
+        <article class="filter-info">
+            <div class="col-md-9">
+                <p class="">{{questoesPublicController.totalQuestoes}} questões encontradas</p>
+            </div>
+            <div class="col-md-3">
+                <form action="" class="form-inline">
+                    <div class="form-group">
+                        <label for="">questões por página</label>
+                        <select name="" id="" class="form-control"
+                                ng-model="questoesPublicController.questoesPorPagina"
+                                ng-change="questoesPublicController.filterQuestoes()">
+                            <option value="10" ng-selected="true">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </article>
+    </div>
+</div>
+<br>
+<div ng-repeat="questao in questoesPublicController.questoes.questoes track by $index">
+    <div id="questoes-all" class="row">
+        <div class="col-md-12">
+            <article class="informacoes-questao well well-sm">
+                <p>
+                    <strong>
+                        {{questoesPublicController.indiceQuestao($index)}}
+                        {{questoesPublicController.indiceAtual}})
+                    </strong>
+                    <span>
+                        {{questao[0].disciplina}} > Interpretação de textos
+                    </span>
+                </p>
+                <p>
+                    <strong>Ano</strong>: {{questao[0].anoConcurso}}
+                    <strong>Banca</strong> : {{questao[0].banca}}
+                    <strong>Órgão</strong> : {{questao[0].orgao}}
+                    <strong>Cargo</strong> : {{questao[0].cargo}}
+                    <strong>Prova</strong> : Teste
+                </p>
+            </article>
+        </div>
+    </div>
+    <hr>
+    <section class="row">
+        <div class="questao col-md-12">
+            <p class="text-justify" ng-bind-html="questao[0].texto | trust"></p>
+            <label for="" class="radio" ng-repeat="respostas in questao.questoes_resposta">
+                <input type="radio" ng-value="{{respostas}}" ng-model="questoesPublicController.questaoResposta">
+                {{respostas.enunciado}}
+            </label>
+            <div class="responder" style="padding:10px;">
+                <button class="btn btn-warning"
+                        ng-click="questoesPublicController.responderQuestao(questoesPublicController.questaoResposta)">
+                    Responder
+                </button>
+                <br>
+            </div>
+            <div class="row">
+                <div ng-show="questoesPublicController.showCorreta.questao_id === questao[0].id">
+                    <div class="alert alert-success alert-dismissible"  role="alert" id="success-alert-{{questao[0].id}}" style="display:block">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <i class="glyphicon glyphicon-ok"></i>&nbsp;{{questoesPublicController.MENSAGENS.MSG_QUESTAO_CORRETA}}
+                    </div>
+                </div>
+                <div ng-show="questoesPublicController.showIncorreta.questao_id === questao[0].id">
+                <div class="alert alert-danger alert-dismissible" role="alert"  id="error-alert-{{questao[0].id}}" style="display:block" >
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <i class="glyphicon glyphicon-remove"></i>&nbsp;{{questoesPublicController.MENSAGENS.MSQ_QUESTAO_INCORRETA}}
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+</div>
+<ul uib-pagination
+    ng-model="questoesPublicController.currentPage"
+    total-items="questoesPublicController.totalQuestoes"
+    max-size="questoesPublicController.questoesPorPagina"
+    boundary-links="true"
+    previous-text="&lsaquo;"
+    next-text="&rsaquo;"
+    first-text="&laquo;"
+    last-text="&raquo;"
+    ng-change="questoesPublicController.pageChanged()">
+</ul>

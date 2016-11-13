@@ -1,0 +1,12 @@
+{
+  "dev" : {
+    "host" : "http://biblioteca-concurseiro:8000/",
+    "apiContext" : "api",
+    "version" : "v1"
+  },
+  "prod" : {
+    "host" : "http://www.quadrilatero.net.br/server/public",
+    "apiContext" : "api",
+    "version" : "v1"
+  }
+}
