@@ -20,6 +20,8 @@ function QuestoesPublicService($http, $q, CommonConfig) {
         'getCargos': getCargos,
         'getNivelQuestao': getNivelQuestao,
         'getAssuntos': getAssuntos,
+        'getProvas': getProvas,
+        'getInstituicoes': getInstituicoes,
         'getModalidades': getModalidades,
         'getConcursos' : getConcursos
     };
@@ -60,36 +62,46 @@ function QuestoesPublicService($http, $q, CommonConfig) {
         });
     }
 
-    function getAssuntos(_params) {
+    function getAssuntos() {
         return $http({
             method: 'GET',
             url: CommonConfig.getBaseUrl() + '/public/assuntos',
-            headers: _headers,
-            params : _params
+            headers: _headers
         });
     }
-    function getModalidades(_params) {
+    function getInstituicoes() {
+        return $http({
+            method: 'GET',
+            url: CommonConfig.getBaseUrl() + '/public/instituicoes',
+            headers: _headers
+        });
+    }
+    function getModalidades() {
         return $http({
             method: 'GET',
             url: CommonConfig.getBaseUrl() + '/public/modalidades',
-            headers: _headers,
-            params : _params
+            headers: _headers
         });
     }
-    function getCargos(_params) {
+    function getCargos() {
         return $http({
             method: 'GET',
             url: CommonConfig.getBaseUrl() + '/public/cargos',
-            headers: _headers,
-            params : _params
+            headers: _headers
         });
     }
-    function getConcursos(_params) {
+    function getConcursos() {
         return $http({
             method: 'GET',
             url: CommonConfig.getBaseUrl() + '/public/concursos',
-            headers: _headers,
-            params : _params
+            headers: _headers
+        });
+    }
+    function getProvas() {
+        return $http({
+            method: 'GET',
+            url: CommonConfig.getBaseUrl() + '/public/provas',
+            headers: _headers
         });
     }
 

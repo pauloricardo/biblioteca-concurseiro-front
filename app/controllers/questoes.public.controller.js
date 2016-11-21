@@ -16,7 +16,7 @@
         vm.currentPage = 1;
         vm.maxSize = 10;
         vm.skip = 0;
-        vm.questoesPorPagina = 10;
+        vm.questoesPorPagina = 5;
 
         vm.pageChanged = pageChanged;
         vm.populateFilterInstituicao = populateFilterInstituicao;
@@ -59,6 +59,7 @@
             vm.filter.disciplina = undefined;
             vm.filter.banca = undefined;
             vm.filter.instituicao = undefined;
+            vm.filter.assunto = undefined;
 
             filterQuestoes();
         }
@@ -71,12 +72,13 @@
                 "disciplina_id" : vm.filter.disciplina || null,
                 "banca_id" : vm.filter.banca || null,
                 "orgao_id" : vm.filter.instituicao || null,
+                "assunto_id" : vm.filter.assunto || null,
                 'skip' : vm.skip,
                 'top' : vm.questoesPorPagina
             };
             QuestoesPublicService.getQuestoes(params).then(function(result){
                 vm.questoes = result.data.filtroQuestoes;
-                vm.totalQuestoes = vm.questoes['Total-Questoes'];
+                vm.totalQuestoes = vm.questoes['X-Total-Questoes'];
             });
         }
         function responderQuestao(respostaSelecionada){
@@ -153,13 +155,33 @@
                 }),
                 QuestoesPublicService.getQuestoes({skip:0, top:vm.questoesPorPagina}).then(function(result){
                     return result;
+                }),
+                QuestoesPublicService.getCargos().then(function(result){
+                    return result;
+                }),
+                QuestoesPublicService.getAssuntos({skip:0, top:vm.questoesPorPagina}).then(function(result){
+                    return result;
+                }),
+                QuestoesPublicService.getProvas().then(function(result){
+                    return result;
+                }),
+                QuestoesPublicService.getConcursos().then(function(result){
+                    return result;
+                }),
+                QuestoesPublicService.getInstituicoes().then(function(result){
+                    return result;
                 })
             ]).then(function (data) {
                 if (data[0] && data[1] && data[2]) {
                     vm.bancas = data[0].data;
                     vm.disciplinas = data[1].data.filtroDisciplinas;
                     vm.questoes = data[2].data.filtroQuestoes;
-                    vm.totalQuestoes = vm.questoes['Total-Questoes'];
+                    vm.cargos = data[3].data.filtroCargos;
+                    vm.assuntos = data[4].data.filtroAssuntos;
+                    vm.provas = data[5].data.filtroProvas;
+                    vm.concursos = data[6].data.filtroConcursos;
+                    vm.instituicoes = data[7].data;
+                    vm.totalQuestoes = vm.questoes['X-Total-Questoes'];
                 }
             });
         }

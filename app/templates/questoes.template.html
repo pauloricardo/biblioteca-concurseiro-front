@@ -1,3 +1,7 @@
+<section class="breadcrumbs btn btn-default btn-sm" style="margin-top:10px;">
+    Início > Concursos > <strong>Questões</strong>
+</section>
+<h1 class="page-header" style="font-size:1.2em !important; font-weight:bold;">Questões Em Foco | Questões de Concursos</h1>
 <section class="header-questoes">
     <form class="form" role="form">
         <div class="form-group clearfix">
@@ -6,7 +10,6 @@
                     <select name="" id=""
                             ng-model="questoesPublicController.filter.banca"
                             ng-options="item.banca.id as item.banca.nome for item in questoesPublicController.bancas"
-                            ng-change="questoesPublicController.populateFilterInstituicao(questoesPublicController.filter.banca)"
                             class="form-control">
                         <option value="">Banca</option>
                     </select>
@@ -15,8 +18,8 @@
                     <select name="" id=""
                             class="form-control"
                             ng-model="questoesPublicController.filter.instituicao"
-                            ng-options="item.id as item.nome for item in questoesPublicController.instituicoes"
-                            ng-change="questoesPublicController.populateFilterCargo(questoesPublicController.filter.instituicao)">
+                            ng-options="item.orgao.id as item.orgao.nome for item in questoesPublicController.instituicoes"
+                            >
                         <option value="">Instituição</option>
                     </select>
                 </div>
@@ -24,8 +27,6 @@
                     <select name="" id=""
                             class="form-control"
                             ng-model="questoesPublicController.filter.cargo"
-                            ng-change="questoesPublicController.populateFilterConcurso(questoesPublicController.filter.cargo);
-                            questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo)"
                             ng-options="item.cargos.id as item.cargos.nome for item in questoesPublicController.cargos">
                         <option value="">Cargo</option>
                     </select>
@@ -33,8 +34,7 @@
                 <div class="col-md-3">
                     <select name="" id="" class="form-control"
                             ng-model="questoesPublicController.filter.anoConcurso"
-                            ng-change="questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo, questoesPublicController.filter.anoConcurso)"
-                            ng-options="item.concurso.id as item.concurso.ano for item in questoesPublicController.concursos">
+                            ng-options="item.concurso.ano as item.concurso.ano for item in questoesPublicController.concursos">
                         <option value="">Ano</option>
                     </select>
                 </div>
@@ -45,7 +45,6 @@
                     <select name="" id=""
                             ng-model="questoesPublicController.filter.nivelQuestao"
                             class="form-control"
-                            ng-change="questoesPublicController.populateFilterDisciplinas(questoesPublicController.filter.cargo, questoesPublicController.filter.anoConcurso,questoesPublicController.filter.nivelQuestao)"
                             ng-options="item.id as item.nome for item in questoesPublicController.nivelQuestao">
                         <option value="">Nível</option>
                     </select>
@@ -59,8 +58,11 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select name="" id="" class="form-control">
-                        <option value="">Assunto</option>
+                    <select name="" id="" class="form-control"
+                            ng-model="questoesPublicController.filter.assunto"
+                            class="form-control"
+                            ng-options="item.assuntos.id as item.assuntos.nome for item in questoesPublicController.assuntos">
+                        <option value="">Assuntos</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -78,10 +80,10 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-3">
                     <br>
-                    <button class="btn btn-default" type="button"
+                    <button class="btn btn-default btn-lg" type="button"
                             ng-click="questoesPublicController.cleanFilter()">Limpar
                     </button>
-                    <button class="btn btn-primary" type="button"
+                    <button class="btn btn-warning btn-lg" type="button"
                             ng-click="questoesPublicController.filterQuestoes()">Filtrar
                     </button>
                 </div>
@@ -93,7 +95,7 @@
     <div class="col-md-12">
         <article class="filter-info">
             <div class="col-md-9">
-                <p class="">{{questoesPublicController.totalQuestoes}} questões encontradas</p>
+                <p class="btn btn-warning">{{questoesPublicController.totalQuestoes}} questões encontradas</p>
             </div>
             <div class="col-md-3">
                 <form action="" class="form-inline">
@@ -102,7 +104,8 @@
                         <select name="" id="" class="form-control"
                                 ng-model="questoesPublicController.questoesPorPagina"
                                 ng-change="questoesPublicController.filterQuestoes()">
-                            <option value="10" ng-selected="true">10</option>
+                            <option value="5" ng-selected="true">5</option>
+                            <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
                             <option value="30">30</option>
@@ -132,7 +135,7 @@
                     <strong>Banca</strong> : {{questao[0].banca}}
                     <strong>Órgão</strong> : {{questao[0].orgao}}
                     <strong>Cargo</strong> : {{questao[0].cargo}}
-                    <strong>Prova</strong> : Teste
+                    <strong>Prova</strong> : {{questao[0].prova}}
                 </p>
             </article>
         </div>
@@ -140,15 +143,21 @@
     <hr>
     <section class="row">
         <div class="questao col-md-12">
+            <details ng-if="questao[0].texto_auxililar" >
+                <summary style="color:orange; font-size:16px;">texto auxiliar</summary>
+                <p ng-bind-html="questao[0].texto_auxiliar | trust"></p>
+            </details>
+            <br>
             <p class="text-justify" ng-bind-html="questao[0].texto | trust"></p>
-            <label for="" class="radio" ng-repeat="respostas in questao.questoes_resposta">
+
+            <label for="" class="radio" ng-repeat="respostas in questao.questoes_resposta" style="font:20px normal !important;">
                 <input type="radio" ng-value="{{respostas}}" ng-model="questoesPublicController.questaoResposta">
                 {{respostas.enunciado}}
             </label>
             <div class="responder" style="padding:10px;">
                 <button class="btn btn-warning"
                         ng-click="questoesPublicController.responderQuestao(questoesPublicController.questaoResposta)">
-                    Responder
+                    <span style="font-size:18px;">Responder</span>
                 </button>
                 <br>
             </div>
